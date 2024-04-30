@@ -1,0 +1,788 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOnbNn5Vv7WVSAqXqD4bGN8",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/quddaz/Machine_Learing/blob/main/5%EC%9E%A5/5-3%20%EC%95%99%EC%83%81%EB%B8%94ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 트리의 앙상블"
+      ],
+      "metadata": {
+        "id": "_1G2OOH-Xp9L"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 여러 결정 트리를 결합하여 보다 강력한 모델을 만드는 머신러닝 기법\n",
+        "+ 가장 좋은 알고리즘이 있다고 다른 알고리즘을 배우지 않으면 안됨\n",
+        "+ 보편적으로 성능이 좋아 널리 사용되는 알고리즘이 있지만 문제마다 다를 수 있으므로 어떤 알고리즘이 더 뛰어나다고 판단해서는 안된다."
+      ],
+      "metadata": {
+        "id": "9o4K48hFa17r"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### 정형 데이터 VS 비정형 데이터"
+      ],
+      "metadata": {
+        "id": "vPo9ndkcbDhD"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 정형 데이터 : CSV, 데이터베이스, 액셀\n",
+        "+ 비정형 데이터 : 책이나 글의 텍스트 데이터, 디지털카메라 사진, 음악파일 등\n",
+        "\n",
+        "+ 앙상블 학습\n",
+        " + 여러 모델을 합쳐서 하나의 모듈을 만들어낸다\n",
+        "  + 정형 데이터를 다루는 데 가장 뛰어난 성과를 내는 알고리즘\n",
+        "  + 대부분 결정 트리에서 만들어짐"
+      ],
+      "metadata": {
+        "id": "bVC5R91dbFuC"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## 랜덤 포레스트"
+      ],
+      "metadata": {
+        "id": "7gTWlM51bYI-"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### 랜덤 포레스트란?"
+      ],
+      "metadata": {
+        "id": "9rXu9nU1bmav"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 앙상블 학습의 대표이며 안정적이기 때문에 널리 사용된다.\n",
+        "+ 결정 트리를 랜덤하게 만들어 결정 트리의 숲을 만든다.\n",
+        "+ 각 결정 트리의 예측을 사용해 최종 예측을 만든다."
+      ],
+      "metadata": {
+        "id": "t9mYGpx2bWkn"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### 부트스트랩 샘플"
+      ],
+      "metadata": {
+        "id": "rw9ePkK9bon9"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 훈련 데이터에서 중복을 허용하여 랜덤하게 추출\n",
+        "+ 훈련 세트의 크기와 같게 만든다."
+      ],
+      "metadata": {
+        "id": "BpnCqw2Ybrc-"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### 랜덤 포레스트 훈련 방법"
+      ],
+      "metadata": {
+        "id": "9g90-mEYb6rj"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 전체 특성 중 일부 특성을 무작위로 고르는 방법\n",
+        " + 분류 모델 : RandomForestCalssifier, 전체 특성 개수의 제곱근\n",
+        " + 회귀 모델 : RandomForestRegerssor, 전체 특성\n",
+        "+ 사이킷런의 랜덤 포레스트는 100개의 결정 트리를 선택하고, 분류할 때는 각 트리의 클래스별 확률을 평균하여 가장 높은 확률을 가진 클래스를 예측한다.\n",
+        "+ 회귀는 각 트리의 예측을 평균"
+      ],
+      "metadata": {
+        "id": "aoaJEJIQb-gi"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "\n",
+        "\n",
+        "> 랜덤 포레스트의 장점\n",
+        "\n",
+        "+ 훈련 세트에 과대적합되는 것을 막는다.\n",
+        "+ 검증 세트와 테스트 세트에서 안정적인 성능\n",
+        "+ 기본 설정만으로 좋은 결과를 얻을 수 있음\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "ghOiEQbZcaUI"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "wine = pd.read_csv('https://bit.ly/wine_csv_data')\n",
+        "\n",
+        "data = wine[['alcohol', 'sugar', 'pH']].to_numpy()\n",
+        "target = wine['class'].to_numpy()\n",
+        "\n",
+        "train_input, test_input, train_target, test_target = train_test_split(data, target, test_size=0.2, random_state=42)"
+      ],
+      "metadata": {
+        "id": "u-9MlWOCcwO9"
+      },
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_validate\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "\n",
+        "rf = RandomForestClassifier(n_jobs=-1, random_state=42)\n",
+        "scores = cross_validate(rf, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aO50sOtqcy7m",
+        "outputId": "6e37781a-9d25-4c42-ab4c-376706d5a477"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9973541965122431 0.8905151032797809\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "과대 적합인 것을 확인할 수 있다.\n",
+        "+ 랜덤 포레스트는 결정 트리의 앙상블이기 때문에 결정 트리의 매개변수를 모두 사용할 수 있다.\n",
+        "+ 매개변수를 이용하여 과대적합을 막고 조정을 하여 가장 좋은 랜덤 포레스트를 할 수 있다."
+      ],
+      "metadata": {
+        "id": "Q5BKOkKmdJz0"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "rf.fit(train_input, train_target)\n",
+        "print(rf.feature_importances_)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xVIMFAXje6FR",
+        "outputId": "dc30b5ad-ce9e-4451-cf52-9d4b67e81ee0"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[0.23167441 0.50039841 0.26792718]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "![1.PNG](data:image/png;base64,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)"
+      ],
+      "metadata": {
+        "id": "4ATXuEvxevOX"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 랜덤 포레스트가 특성의 일부를 랜덤하게 선택하여 결정 트리를 훈련하여, 하나의 특성에 과도하게 집중하지 않고 좀 더 많은 특성들이 훈련에 기여할 기회를 얻게 할 수 있다.\n",
+        "+ 그러므로 과대적합을 줄이고 일반화 성능을 높인다."
+      ],
+      "metadata": {
+        "id": "ynMBrGKee-fX"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### OOB 샘플"
+      ],
+      "metadata": {
+        "id": "Dr-9kcFtfS_z"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "OOB 샘플 : 부트스트랩 샘플에 포함되지 않고 남은 샘플을 의미한다.\n",
+        "+ OOB 점수를 이용하면 교차 검증을 대신할 수 있어서 결과적으로 훈련 세트에 더 많은 샘플 사용이 가능하다.\n",
+        "+ 좋은 평가를 위해 자원을 사용할지 결정이 가능하다."
+      ],
+      "metadata": {
+        "id": "LMd7Nj4vfV0a"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "rf = RandomForestClassifier(oob_score=True, n_jobs=-1, random_state=42)\n",
+        "\n",
+        "rf.fit(train_input, train_target)\n",
+        "print(rf.oob_score_)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wPQ_l-HVfimH",
+        "outputId": "278afbb4-c077-47a8-b15d-7423502e54d5"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.8934000384837406\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## 엑스트라 트리"
+      ],
+      "metadata": {
+        "id": "W1GjshCYfoC7"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 랜덤 포레스트와 비슷하지만 부트스트랩 샘플을 사용하지 않음(전체 훈련을 진행)\n",
+        "+ 노드를 분할할 때 가장 좋은 분할을 찾는 것이 아니라 랜덤하게 분할\n",
+        "+ 결정 트리의 매개변수 splitter = 'random'와 비슷\n",
+        "+ 무작위성이 랜덤 포레스트보다 크기 때문에 많은 훈련을 해야 하지만 랜덤하게 노드를 분할하기 때문에 빠른 속도가 장점\n",
+        "+ **항상 랜덤이란 많은 훈련이 필요하다는 것을 기억하자**"
+      ],
+      "metadata": {
+        "id": "ywZMJxuift6T"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import ExtraTreesClassifier\n",
+        "\n",
+        "et = ExtraTreesClassifier(n_jobs=-1, random_state=42)\n",
+        "scores = cross_validate(et, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "zKb5AE_nfrUn",
+        "outputId": "bca572ef-a9f5-40a3-f500-f8bb0532b7bd"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9974503966084433 0.8887848893166506\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "랜덤 포레스트의 결과와 비슷하다.\n",
+        "+ 엑스트라 트리는 무작위성이 크기 때문에 포레스트보다 결정 트리를 더 많이 훈련 해야한다.\n",
+        "+ 랜덤하게 노드를 분할하기 때문에 빠른 계산 속도"
+      ],
+      "metadata": {
+        "id": "tNHXTiDigJPs"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "et.fit(train_input, train_target)\n",
+        "print(et.feature_importances_)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KtENz4bdgBVR",
+        "outputId": "cd1556c6-636d-40a2-9039-16cdbd16f872"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[0.20183568 0.52242907 0.27573525]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## 그레이디언트 부스팅"
+      ],
+      "metadata": {
+        "id": "fS0VIZZkgvcs"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 깊이가 얕은 결정 트리를 사용하여 이전 트리의 오차를 보완하는 방식으로 앙상블을 한다.\n",
+        "+ 깊이가 3인 결정 트리 100개 사용\n",
+        "+ 깊이가 얕은 결정 트리를 쓰기 때문에 과대 적합에 강하고 일반적으로 높은 일반화 성능을 기대할 수 있다.\n",
+        "+ 경사 하강법을 사용하여 트리를 앙상블에 추가\n",
+        "+ 분류에서는 로지스틱 손실 함수를 사용하고, 회귀에서는 평균 제곱 오차 함수 사용\n",
+        "+ 그레이디언트 부스팅은 결정 트리를 계속 추가하면서 가장 낮은 곳(손실이 작은)을 찾아 이동\n",
+        "+ 학습률 매개변수로 속도를 조절할 수 있다."
+      ],
+      "metadata": {
+        "id": "s725OIEogxpi"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import GradientBoostingClassifier\n",
+        "\n",
+        "gb = GradientBoostingClassifier(random_state=42)\n",
+        "scores = cross_validate(gb, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2muqiOqwhefv",
+        "outputId": "c6371e4b-89e4-48f4-d8a0-abe31d522ad5"
+      },
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.8881086892152563 0.8720430147331015\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "과대적합이 되지 않은 적당한 결과를 얻는다.\n",
+        "+ 그레이디언트 부스팅은 결정 트리의 개수를 늘려도 과대적합에 매우 강함\n",
+        "+ 트리가 3인 결정 트리를 쓰기 때문이다."
+      ],
+      "metadata": {
+        "id": "oM_zG3lGhl5h"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "학습률을 증가시키고 트리의 개수를 늘리면 조금 더 성능이 상승한다."
+      ],
+      "metadata": {
+        "id": "ZVspERLph3FM"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "gb = GradientBoostingClassifier(n_estimators=500, learning_rate=0.2, random_state=42)\n",
+        "scores = cross_validate(gb, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "zjk8MfQyh7Qz",
+        "outputId": "c8f1d05e-7bc3-4fd8-a050-097ce1ab75cc"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9464595437171814 0.8780082549788999\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "트리의 개수를 500개로 늘려 속도는 느려졌지만 좋은 성능이 나온다."
+      ],
+      "metadata": {
+        "id": "zMW5fb1Gh-oz"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "그러나 확률적 경사하강법을 사용하여 n_jobs 매개변수의 의미가 없다.\n",
+        "+ 정리하자면 그레이디언트 부스팅은 랜덤 포레스트보다 조금 더 높은 성능을 얻지만 n_jobs를 사용할 수 없어 병렬처리를 못하기 때문에 속도가 느리다."
+      ],
+      "metadata": {
+        "id": "GTz01JqMiip_"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "gb.fit(train_input, train_target)\n",
+        "print(gb.feature_importances_)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "i3EWiVFmheTl",
+        "outputId": "b6d18003-d4a1-4842-c726-305e865faa8e"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[0.15872278 0.68010884 0.16116839]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### 히스토그램 기반 그레이디언트 부스팅"
+      ],
+      "metadata": {
+        "id": "_hWXZChIjESj"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 정형 데이터를 다루는 머신러닝 알고리즘 중에 가장 인기있는 알고리즘\n",
+        "+ 입력 특성을 256개의 구간으로 나누므로 노드를 분할할 대 최적의 분할을 매우 빠르게 찾을 수 있음\n",
+        "+ 256개의 구간 중에서 하나를 떼어 놓고 누락된 값을 위하여 사용하기 때문에 입력에 누락된 특성이 있더라도 이를 따로 전처리할 필요가 없다.(255+1)\n",
+        "+ 기본 매개변수로도 안정적인 성능을 얻을 수 있다."
+      ],
+      "metadata": {
+        "id": "MO0Yge2CjLD4"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.experimental import enable_hist_gradient_boosting\n",
+        "from sklearn.ensemble import HistGradientBoostingClassifier\n",
+        "\n",
+        "hgb = HistGradientBoostingClassifier(random_state=42)\n",
+        "scores = cross_validate(hgb, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "i4Mq3AnQjCOs",
+        "outputId": "35cc3fe6-4baf-4fa9-83af-91e3e7811af2"
+      },
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9321723946453317 0.8801241948619236\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "\n",
+        "\n",
+        "> 치환 중요도\n",
+        "\n",
+        "+ 특성을 하나씩 랜덤하게 섞어서 모델의 성능이 변하는지 관찰하여 어떤 특성이 중요한지 계산하는 것이다.\n",
+        "+ 하나씩 특성을 빼고 성능을 평가해 점수를 계산하는 방법이다.\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "IB2VuB3kjo5w"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.inspection import permutation_importance\n",
+        "\n",
+        "hgb.fit(train_input, train_target)\n",
+        "result = permutation_importance(hgb, train_input, train_target, n_repeats=10,\n",
+        "                                random_state=42, n_jobs=-1)\n",
+        "print(result.importances_mean)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "AfIhmh9Ej3B4",
+        "outputId": "48a9a75f-8d67-4980-a2b9-bbb00347dc6e"
+      },
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[0.08876275 0.23438522 0.08027708]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "밑에는 테스트 세트에 사용한 것"
+      ],
+      "metadata": {
+        "id": "jOR-WR6tkYzP"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "result = permutation_importance(hgb, test_input, test_target, n_repeats=10,\n",
+        "                                random_state=42, n_jobs=-1)\n",
+        "print(result.importances_mean)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4y9ef0qUkV65",
+        "outputId": "1a531c23-1c2c-4139-e27f-7f9c79c99fda"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[0.05969231 0.20238462 0.049     ]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "hgb.score(test_input, test_target)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tcacUfRNkWoK",
+        "outputId": "50341a82-0415-4ef5-9909-c9a95c3eb964"
+      },
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.8723076923076923"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 14
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 87퍼 정도 나왔지만 실전에서는 조금 떨어질 수 있음\n",
+        "+ 앙상블 모델은 단일 결정 트리보다 좋은 결과를 얻을 수 있다.\n",
+        "+ 단점은 매개변수값을 내가 많이 조정해야함"
+      ],
+      "metadata": {
+        "id": "HRbIUF90keSw"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# XGBoost VS LightGBM"
+      ],
+      "metadata": {
+        "id": "pn6Rc3dIkmNf"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "from xgboost import XGBClassifier\n",
+        "\n",
+        "xgb = XGBClassifier(tree_method='hist', random_state=42)\n",
+        "scores = cross_validate(xgb, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Zw9R_Raxkqz3",
+        "outputId": "8833f4c3-775c-41e2-cdd8-5661f44f6a0a"
+      },
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.9558403027491312 0.8782000074035686\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from lightgbm import LGBMClassifier\n",
+        "\n",
+        "lgb = LGBMClassifier(random_state=42)\n",
+        "scores = cross_validate(lgb, train_input, train_target, return_train_score=True, n_jobs=-1)\n",
+        "\n",
+        "print(np.mean(scores['train_score']), np.mean(scores['test_score']))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9cbnFPIfkshf",
+        "outputId": "56ac99bb-41ce-428e-f29d-1da561db5802"
+      },
+      "execution_count": 18,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.935828414851749 0.8801251203079884\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "+ 결정트리는 냅두면 너무 과대적합이 되어 가지치기가 필요하다.\n",
+        "+ 검증 세트는 훈련 도중에 사용하는 세트이다.\n",
+        "+ 앙상블은 일반적으로 결정 트리에서 나온다.\n",
+        " + 랜덤 포레스트 : 부트스트랩을 사용\n",
+        " + 엑스트라 트리 : 결정 트리의 노드를 랜덤하게 분할\n",
+        " + 그레이디언트 부스팅 : 이전 트리의 손실을 보완하는 식으로 얕은 결정트리를 연속적으로 추가한다.\n",
+        " + 히스토그램 기반 그레이디언트 부스팅 : 훈련 데이터를 256개의 정수 구간으로 나누어 어디에 위치할 것인가 미리 정한다."
+      ],
+      "metadata": {
+        "id": "X4JspkyslHco"
+      }
+    }
+  ]
+}
